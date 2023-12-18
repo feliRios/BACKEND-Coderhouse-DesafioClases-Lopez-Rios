@@ -3,6 +3,7 @@
 class ProductManager {
   constructor(){
     this.products = [];
+    this.productId = 1;
   }
 
   getProducts() {
@@ -10,30 +11,28 @@ class ProductManager {
   }
 
   addProduct(title, description, price, thumbnail, code, stock) {
-    const randomId = Math.round(Math.random() * 1000000);
     if (!title || !description || !price || !thumbnail || !code || !stock){
       // Este condicional valida que todos los campos hayan sido completados
       console.log("Todos los campos son obligatorios.");
     } else {
-      let bandera = false;
+      let bandera = true;
       do {
-        // Este bucle cumple la funcion de volver a generar un ID nuevo en caso de que ya exista
-        // un producto con el mismo ID
-        if (!this.products.some(prod => prod.id === randomId)) {
+        // Este bucle cumple la funcion de incrementar automaticamente el ID del producto en caso
+        // de que encuentre un repetido 
+        if (!this.products.some(prod => prod.id === this.productId)) {
           // Este condicional valida que no exista ningun producto con el mismo ID que el generado
+          bandera = false;
           if (!this.products.some(prod => prod.code === code)){
             // Este condicional valida que no exista ningun producto con el mismo codigo que el
-            const product = { id: randomId, title: title, description: description, price: price, thumbnail: thumbnail, code: code, stock: stock };
+            const product = { id: this.productId, title: title, description: description, price: price, thumbnail: thumbnail, code: code, stock: stock };
             this.products.push(product);
           } else {
             console.log(`Error: ya existe un producto con el codigo ${code}`);
           }
         } else {
-          // La variable "bandera" actua como un disparador que indica si la operacion
-          // fue realizada con exito, para salir del bucle
-          bandera = true;
+          this.productId += 1;
         }
-      } while(bandera);
+      } while (bandera)
     }
   }
 
@@ -47,13 +46,3 @@ class ProductManager {
     }
   }
 }
-
-let inst = new ProductManager();
-
-inst.addProduct("remera", "una remera", 999, "imagen.com", 987, 4);
-inst.addProduct("pantalon", "un pantalon", 999, "imagen.com", 986, 4);
-
-
-console.log(inst);
-
-console.log(inst.getProductById(inst.products[0].id));
