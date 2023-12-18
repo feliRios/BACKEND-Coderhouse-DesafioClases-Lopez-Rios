@@ -15,17 +15,23 @@ class ProductManager {
       // Este condicional valida que todos los campos hayan sido completados
       console.log("Todos los campos son obligatorios.");
     } else {
-      let bandera = true
+      let bandera = false;
       do {
-        // Este condicional verifica que el id generado automaticamente no se haya generado
-        // con el mismo valor que otro ya existente
+        // Este bucle cumple la funcion de volver a generar un ID nuevo en caso de que ya exista
+        // un producto con el mismo ID
         if (!this.products.some(prod => prod.id === randomId)) {
-          // Este condicional valida que no exista ningun producto con codigo
-          // repetido
-          const product = { id: randomId, title: title, description: description, price: price, thumbnail: thumbnail, code: code, stock: stock };
-          this.products.push(product);
+          // Este condicional valida que no exista ningun producto con el mismo ID que el generado
+          if (!this.products.some(prod => prod.code === code)){
+            // Este condicional valida que no exista ningun producto con el mismo codigo que el
+            const product = { id: randomId, title: title, description: description, price: price, thumbnail: thumbnail, code: code, stock: stock };
+            this.products.push(product);
+          } else {
+            console.log(`Error: ya existe un producto con el codigo ${code}`);
+          }
         } else {
-          bandera = false;
+          // La variable "bandera" actua como un disparador que indica si la operacion
+          // fue realizada con exito, para salir del bucle
+          bandera = true;
         }
       } while(bandera);
     }
